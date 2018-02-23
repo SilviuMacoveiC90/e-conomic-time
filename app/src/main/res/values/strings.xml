@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">E-conomic - time</string>
+    <string name="insert_text">Insert text</string>
+    <string name="date">Date</string>
+    <string name="project">Project</string>
+    <string name="activity">Activity</string>
+    <string name="hours">Hours</string>
+    <string name="save">Save</string>
+    <string name="dummy">--</string>
+    <string name="add">Add</string>
+</resources>
