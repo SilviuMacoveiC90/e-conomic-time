@@ -3,35 +3,38 @@ package com.macovei.silviu.economictime.data.repository.local
 import com.macovei.silviu.economictime.data.dao.ListDao
 import com.macovei.silviu.economictime.data.model.ListItem
 import com.macovei.silviu.economictime.data.repository.ListDataSource
-import com.macovei.silviu.economictime.di.AppScope
+import io.reactivex.Completable
 import io.reactivex.Flowable
-import javax.inject.Inject
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by silviumacovei on 2/23/18.
  */
-@AppScope
 class ListLocalDataSource
-@Inject constructor(private val listDao: ListDao) : ListDataSource {
+constructor(private val listDao: ListDao) : ListDataSource {
 
 
     override fun loadList(): Flowable<List<ListItem>> {
         return listDao.all()
     }
 
-    override fun addListItem(listItem: ListItem) {
+    override fun addListItem(listItem: ListItem): Completable {
         // Insert new one
-        listDao.insert(listItem)
+        return Completable.fromAction { listDao.insert(listItem) }
+                .subscribeOn(Schedulers.io())
     }
 
 
-    override fun deleteListItem(listItem: ListItem) {
-        listDao.delete(listItem)
+    override fun deleteListItem(listItem: ListItem): Completable {
+        // Delete specific element
+        return Completable.fromAction { listDao.delete(listItem) }
+                .subscribeOn(Schedulers.io())
     }
 
 
-    override fun clearData() {
+    override fun clearData(): Completable {
         // Clear old data
-        listDao.deleteAll()
+        return Completable.fromAction { listDao.deleteAll() }
+                .subscribeOn(Schedulers.io())
     }
 }
