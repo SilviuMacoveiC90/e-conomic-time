@@ -6,6 +6,10 @@ import com.macovei.silviu.economictime.data.model.ListItem
  * Created by silviumacovei on 2/20/18.
  */
 interface ListView {
-    fun updateUi(items: Collection<ListItem>)
-    fun goToDetails(position: Int)
+    fun goToDetails(listItem: ListItem)
+    fun stopLoadingIndicator() {}
+    fun showErrorMessage(localizedMessage: String?) {}
+    fun showData(list: List<ListItem>) {}
+    fun showNoDataMessage() {}
+    fun goToEmptyDetails() {}
 }

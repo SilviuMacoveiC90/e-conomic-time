@@ -24,6 +24,7 @@ import javax.inject.Inject
 
 class ListFragment : Fragment(), ListView, Injectable {
 
+
     @Inject
     lateinit var nav: Navigator
 
@@ -56,27 +57,36 @@ class ListFragment : Fragment(), ListView, Injectable {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == R.id.add) {
-            listPresenter.launchDetailsScreen(-1)
+            listPresenter.launchEmptyDetailsScreen()
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun updateFromAdapter() {
         adapter.setItemClickListener(object : ListAdapter.ItemClickListener {
-            override fun onItemClick(position: Int, toDelete: Boolean) {
-                listPresenter.processEvent(position, toDelete)
+            override fun deleteElement(item: ListItem) {
+               listPresenter.removeListItem(item)
+            }
+
+            override fun goToDetails(uid : Long) {
+                listPresenter.processEvent(uid)
             }
         })
     }
 
 
-    override fun updateUi(items: Collection<ListItem>) {
+    override fun showData(items: List<ListItem>) {
         adapter.replace(items)
     }
 
 
-    override fun goToDetails(position: Int) {
-        nav.goToEdit(position)
+
+    override fun goToDetails(listItem: ListItem) {
+        nav.goToEdit(listItem)
+    }
+
+    override fun goToEmptyDetails() {
+        nav.goToEmptyEdit()
     }
 }
 

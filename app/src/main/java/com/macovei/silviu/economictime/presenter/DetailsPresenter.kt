@@ -1,16 +1,22 @@
 package com.macovei.silviu.economictime.presenter
 
-import com.macovei.silviu.economictime.data.dao.ListDao
 import com.macovei.silviu.economictime.data.model.ListItem
+import com.macovei.silviu.economictime.data.repository.ListRepository
 import com.macovei.silviu.economictime.ui.details.DetailsView
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
  * Created by silviumacovei on 2/21/18.
  */
-class DetailsPresenter @Inject constructor(private val listDao: ListDao) {
+class DetailsPresenter @Inject constructor(
+        private val repository: ListRepository) {
 
     private var detailsView: DetailsView? = null
+
+    private val disposeBag: CompositeDisposable = CompositeDisposable()
 
     fun attachView(view: DetailsView) {
         detailsView = view
@@ -19,19 +25,34 @@ class DetailsPresenter @Inject constructor(private val listDao: ListDao) {
 
     fun detachView() {
         detailsView = null
+        disposeBag.dispose()
     }
 
 
-    fun prepareItem(position: Int) {
-        if (position == -1) {
-            detailsView?.updateUiWithoutData()
-            return
-        }
-        var items: Collection<ListItem> = listDao.all()
-        detailsView?.updateUiWithData(items.elementAt(position))
+    fun prepareItem(uid: Long) {
+        getItem(uid)
     }
 
     fun saveData(listItem: ListItem) {
-        listDao.insert(listItem)
+        insertItem(listItem)
     }
+
+    private fun getItem(uid: Long) {
+        val disposable = repository.getListItem(uid)
+                .filter({ listItem -> listItem != null })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ listItem -> detailsView?.updateUiWithData(listItem) })
+        disposeBag.add(disposable)
+    }
+
+
+    private fun insertItem(listItem: ListItem) {
+        val disposable = repository.addListItem(listItem)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({})
+        disposeBag.add(disposable)
+    }
+
 }

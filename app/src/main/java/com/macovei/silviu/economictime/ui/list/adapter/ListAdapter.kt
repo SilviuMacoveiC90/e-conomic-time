@@ -32,11 +32,11 @@ class ListAdapter : Adapter<ListAdapter.ViewHolder>() {
         holder?.status?.text = item.status
 
         holder?.edit?.setOnClickListener({
-            listener?.onItemClick(position, false)
+            listener?.goToDetails(item.uid!!)
         })
 
         holder?.remove?.setOnClickListener({
-            listener?.onItemClick(position, true)
+            listener?.deleteElement(item)
         })
     }
 
@@ -91,6 +91,7 @@ class ListAdapter : Adapter<ListAdapter.ViewHolder>() {
 
 
     interface ItemClickListener {
-        fun onItemClick(position: Int, toDelete: Boolean)
+        fun goToDetails(uid: Long)
+        fun deleteElement(item: ListItem)
     }
 }

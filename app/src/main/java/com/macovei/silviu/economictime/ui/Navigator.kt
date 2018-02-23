@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.app.FragmentManager
 import com.macovei.silviu.economictime.MainActivity
 import com.macovei.silviu.economictime.R
+import com.macovei.silviu.economictime.data.model.ListItem
 import com.macovei.silviu.economictime.ui.details.DetailsFragment
 import com.macovei.silviu.economictime.ui.list.ListFragment
 import javax.inject.Inject
@@ -23,12 +24,20 @@ class Navigator @Inject constructor(act: MainActivity) {
                 .commit()
     }
 
-    fun goToEdit(position: Int) {
+    fun goToEdit(listItem: ListItem) {
 
         var fragment = DetailsFragment()
         var bundle = Bundle()
-        bundle.putInt("item", position)
+        bundle.putLong("item", listItem.uid!!)
         fragment.arguments = bundle
+        supportFragm.beginTransaction()
+                .replace(id, fragment)
+                .addToBackStack(fragment.toString())
+                .commit()
+    }
+
+    fun goToEmptyEdit() {
+        var fragment = DetailsFragment()
         supportFragm.beginTransaction()
                 .replace(id, fragment)
                 .addToBackStack(fragment.toString())

@@ -59,7 +59,9 @@ class DetailsFragment : Fragment(), Injectable, DetailsView {
         super.onViewCreated(view, savedInstanceState)
         ButterKnife.bind(this, view!!)
         detailsPresenter.attachView(this)
-        detailsPresenter.prepareItem(arguments!!.getInt("item", 0))
+        if (arguments != null) {
+            detailsPresenter.prepareItem(arguments!!.getLong("item", 0))
+        }
     }
 
     override fun onDestroyView() {
