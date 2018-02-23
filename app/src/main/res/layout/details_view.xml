@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/item_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/date"
+        app:layout_constraintEnd_toStartOf="@+id/item_date_value"
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/item_date_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/insert_text"
+        app:layout_constraintBottom_toBottomOf="@+id/item_date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/item_date"
+        app:layout_constraintTop_toTopOf="@+id/item_date" />
+
+
+    <TextView
+        android:id="@+id/item_project"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/project"
+        app:layout_constraintEnd_toStartOf="@+id/item_project_value"
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_date" />
+
+    <EditText
+        android:id="@+id/item_project_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/insert_text"
+        app:layout_constraintBottom_toBottomOf="@+id/item_project"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/item_project"
+        app:layout_constraintTop_toTopOf="@+id/item_project" />
+
+
+    <TextView
+        android:id="@+id/item_activity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/activity"
+        app:layout_constraintEnd_toStartOf="@+id/item_activity_value"
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_project" />
+
+    <EditText
+        android:id="@+id/item_activity_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/insert_text"
+        app:layout_constraintBottom_toBottomOf="@+id/item_activity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/item_activity"
+        app:layout_constraintTop_toTopOf="@+id/item_activity" />
+
+
+    <TextView
+        android:id="@+id/item_hours"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/hours"
+        app:layout_constraintEnd_toStartOf="@+id/item_hours_value"
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_activity" />
+
+    <EditText
+        android:id="@+id/item_hours_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/insert_text"
+        app:layout_constraintBottom_toBottomOf="@+id/item_hours"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/item_hours"
+        app:layout_constraintTop_toTopOf="@+id/item_hours" />
+
+    <Button
+        android:id="@+id/item_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
