@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.macovei.silviu.economictime.R
-import com.macovei.silviu.economictime.data.model.ListItem
+import com.macovei.silviu.economictime.data.entity.ListItem
 import com.macovei.silviu.economictime.di.Injectable
 import com.macovei.silviu.economictime.presenter.ListPresenter
 import com.macovei.silviu.economictime.ui.Navigator
@@ -65,20 +65,19 @@ class ListFragment : Fragment(), ListView, Injectable {
     private fun updateFromAdapter() {
         adapter.setItemClickListener(object : ListAdapter.ItemClickListener {
             override fun deleteElement(item: ListItem) {
-               listPresenter.removeListItem(item)
+                listPresenter.removeListItem(item)
             }
 
-            override fun goToDetails(uid : Long) {
+            override fun goToDetails(uid: Long) {
                 listPresenter.processEvent(uid)
             }
         })
     }
 
 
-    override fun showData(items: List<ListItem>) {
-        adapter.replace(items)
+    override fun showData(list: List<ListItem>) {
+        adapter.replace(list)
     }
-
 
 
     override fun goToDetails(listItem: ListItem) {

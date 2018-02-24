@@ -6,7 +6,7 @@ import android.arch.persistence.room.DatabaseConfiguration
 import android.arch.persistence.room.InvalidationTracker
 import android.arch.persistence.room.RoomDatabase
 import com.macovei.silviu.economictime.data.dao.ListDao
-import com.macovei.silviu.economictime.data.model.ListItem
+import com.macovei.silviu.economictime.data.entity.ListItem
 
 /**
  * Created by silviumacovei on 2/21/18.

@@ -1,6 +1,6 @@
 package com.macovei.silviu.economictime.data.repository
 
-import com.macovei.silviu.economictime.data.model.ListItem
+import com.macovei.silviu.economictime.data.entity.ListItem
 import io.reactivex.Completable
 import io.reactivex.Flowable
 
@@ -12,8 +12,10 @@ interface ListDataSource {
 
     fun addListItem(listItem: ListItem): Completable
 
-    fun deleteListItem(listItem: ListItem): Completable
+    fun deleteListItem(uid: Long): Completable
 
     fun clearData(): Completable
+
+    fun getItem(uid: Long): Flowable<ListItem>
 
 }

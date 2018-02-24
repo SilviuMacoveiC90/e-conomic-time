@@ -1,6 +1,6 @@
 package com.macovei.silviu.economictime.presenter
 
-import com.macovei.silviu.economictime.data.model.ListItem
+import com.macovei.silviu.economictime.data.entity.ListItem
 import com.macovei.silviu.economictime.data.repository.ListRepository
 import com.macovei.silviu.economictime.ui.details.DetailsView
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -39,7 +39,7 @@ class DetailsPresenter @Inject constructor(
 
     private fun getItem(uid: Long) {
         val disposable = repository.getListItem(uid)
-                .filter({ listItem -> listItem != null })
+                .filter({ true })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ listItem -> detailsView?.updateUiWithData(listItem) })
@@ -51,7 +51,7 @@ class DetailsPresenter @Inject constructor(
         val disposable = repository.addListItem(listItem)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({})
+                .subscribe({detailsView?.eventFinished()})
         disposeBag.add(disposable)
     }
 

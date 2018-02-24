@@ -1,6 +1,6 @@
 package com.macovei.silviu.economictime.ui.details
 
-import com.macovei.silviu.economictime.data.model.ListItem
+import com.macovei.silviu.economictime.data.entity.ListItem
 
 /**
  * Created by silviumacovei on 2/21/18.
@@ -8,4 +8,5 @@ import com.macovei.silviu.economictime.data.model.ListItem
 interface DetailsView {
     fun updateUiWithData(item: ListItem)
     fun updateUiWithoutData()
+    fun eventFinished()
 }

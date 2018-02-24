@@ -1,10 +1,10 @@
 package com.macovei.silviu.economictime.data.dao
 
 import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
 import android.arch.persistence.room.Insert
+import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
-import com.macovei.silviu.economictime.data.model.ListItem
+import com.macovei.silviu.economictime.data.entity.ListItem
 import io.reactivex.Flowable
 
 
@@ -20,15 +20,15 @@ interface ListDao {
     fun count(): Int
 
     @Query("SELECT * FROM " + "items" + " WHERE uid == :uid")
-    fun getListItemById(uid: Int): Flowable<ListItem>
+    fun getListItemById(uid: Long): Flowable<ListItem>
 
     @Query("DELETE FROM " + "items")
     fun deleteAll()
 
-    @Insert
-    fun insert(vararg listItem: ListItem)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(listItem: ListItem)
 
-    @Delete
-    fun delete(vararg listItem: ListItem)
+    @Query("DELETE FROM " + "items" + " WHERE uid = :uid")
+    fun delete(uid: Long)
 
 }

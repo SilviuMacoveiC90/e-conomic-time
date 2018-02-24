@@ -1,4 +1,4 @@
-package com.macovei.silviu.economictime.data.model
+package com.macovei.silviu.economictime.data.entity
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity

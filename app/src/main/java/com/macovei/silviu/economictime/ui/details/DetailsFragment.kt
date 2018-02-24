@@ -10,7 +10,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.macovei.silviu.economictime.R
-import com.macovei.silviu.economictime.data.model.ListItem
+import com.macovei.silviu.economictime.data.entity.ListItem
 import com.macovei.silviu.economictime.di.Injectable
 import com.macovei.silviu.economictime.presenter.DetailsPresenter
 import javax.inject.Inject
@@ -20,6 +20,7 @@ import javax.inject.Inject
  *
  */
 class DetailsFragment : Fragment(), Injectable, DetailsView {
+
 
 
     @Inject
@@ -76,6 +77,13 @@ class DetailsFragment : Fragment(), Injectable, DetailsView {
         projectValue.setText(item.project)
         activtyValue.setText(item.activity)
         hoursValue.setText(item.hours)
+    }
+
+
+    override fun eventFinished() {
+        if(detailsPresenter == null){
+
+        }
     }
 
 }
