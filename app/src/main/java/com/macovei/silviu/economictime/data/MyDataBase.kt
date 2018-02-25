@@ -6,12 +6,12 @@ import android.arch.persistence.room.DatabaseConfiguration
 import android.arch.persistence.room.InvalidationTracker
 import android.arch.persistence.room.RoomDatabase
 import com.macovei.silviu.economictime.data.dao.ListDao
-import com.macovei.silviu.economictime.data.entity.ListItem
+import com.macovei.silviu.economictime.data.entity.AdministrationItem
 
 /**
  * Created by silviumacovei on 2/21/18.
  */
-@Database(entities = [ListItem::class], version = 1, exportSchema = false)
+@Database(entities = [AdministrationItem::class], version = 1, exportSchema = false)
 abstract class MyDatabase : RoomDatabase() {
     abstract fun listDao(): ListDao
 
