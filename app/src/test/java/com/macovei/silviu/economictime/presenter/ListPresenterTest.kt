@@ -1,29 +1,19 @@
 package com.macovei.silviu.economictime.presenter
 
-import com.macovei.silviu.economictime.data.entity.ListItem
+import com.macovei.silviu.economictime.data.entity.AdministrationItem
 import com.macovei.silviu.economictime.data.repository.ListRepository
 import com.macovei.silviu.economictime.ui.list.ListView
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.never
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.Scheduler
 import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.disposables.Disposable
-import io.reactivex.internal.schedulers.ExecutorScheduler
+import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.junit.runners.Parameterized
-import org.mockito.BDDMockito.then
-import org.mockito.Mockito.atLeastOnce
 import java.util.*
 import java.util.Collections.emptyList
-import java.util.concurrent.Executor
-import java.util.concurrent.TimeUnit
 
 
 /**
@@ -31,40 +21,23 @@ import java.util.concurrent.TimeUnit
  */
 class ListPresenterTest {
 
-    private val LISTITEM1 = ListItem(1, "", "", "", "", "")
-    private val LISTITEM2 = ListItem(2, "", "", "", "", "")
-    private val LISTITEM3 = ListItem(3, "", "", "", "", "")
-    private val NO_LISTITEM = emptyList<ListItem>()
+    private val LISTITEM1 = AdministrationItem(1, "", "", "", 0, "")
+    private val LISTITEM2 = AdministrationItem(2, "", "", "", 0, "")
+    private val LISTITEM3 = AdministrationItem(3, "", "", "", 0, "")
+    private val NO_LISTITEM = emptyList<AdministrationItem>()
     private val THREE_LIST_ITEMS = Arrays.asList(LISTITEM1, LISTITEM2, LISTITEM3)
 
-    @Parameterized.Parameters
-    fun data(): Array<Any> {
-        return arrayOf(NO_LISTITEM, THREE_LIST_ITEMS)
-    }
 
     private lateinit var presenter: ListPresenter
-    private val repo: ListRepository = mock()
-    private val view: ListView = mock()
+    private var repo: ListRepository = mock()
+    private var view: ListView = mock()
 
-    private val immediate = object : Scheduler() {
-        override fun scheduleDirect(run: Runnable,
-                                    delay: Long, unit: TimeUnit): Disposable {
-            return super.scheduleDirect(run, 0, unit)
-        }
-
-        override fun createWorker(): Scheduler.Worker {
-            return ExecutorScheduler.ExecutorWorker(
-                    Executor { it.run() })
-        }
-    }
 
     @Before
     fun setUp() {
-//        RxJavaPlugins.setInitIoSchedulerHandler { Schedulers.trampoline() }
-//        RxJavaPlugins.setInitComputationSchedulerHandler { Schedulers.trampoline() }
-//        RxJavaPlugins.setInitNewThreadSchedulerHandler { Schedulers.trampoline() }
-//        RxJavaPlugins.setInitSingleSchedulerHandler { Schedulers.trampoline() }
         RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
+        repo = mock()
+        view = mock()
         presenter = ListPresenter(repo)
         presenter.listView = view
 
@@ -72,6 +45,10 @@ class ListPresenterTest {
 
     @After
     fun tearDown() {
+        presenter.listView = null
+
+        RxJavaPlugins.reset()
+        RxAndroidPlugins.reset()
     }
 
 
@@ -84,7 +61,8 @@ class ListPresenterTest {
         presenter.loadData()
 
         // Then
-        then<Any>(view).should(atLeastOnce()).run { view.stopLoadingIndicator() }
+        Thread.sleep(100)
+        verify(view, times(2)).stopLoadingIndicator()
     }
 
 
@@ -97,9 +75,9 @@ class ListPresenterTest {
         presenter.loadData()
 
         // Then
-        then<Any>(view).should(atLeastOnce()).run { presenter.handleReturnedData(THREE_LIST_ITEMS) }
-        then<Any>(view).should(atLeastOnce()).run { view.stopLoadingIndicator() }
-        then<Any>(view).should(atLeastOnce()).run { view.showData(THREE_LIST_ITEMS) }
+        Thread.sleep(100)
+        verify(view, times(2)).stopLoadingIndicator()
+        verify(view, atLeastOnce()).showData(THREE_LIST_ITEMS)
     }
 
 
@@ -112,22 +90,21 @@ class ListPresenterTest {
         presenter.loadData()
 
         // Then
-        then<Any>(view).should(atLeastOnce()).run { view.stopLoadingIndicator() }
-        then<Any>(view).should(atLeastOnce()).run { presenter.handleReturnedData(THREE_LIST_ITEMS) }
-        then<Any>(view).should(never()).run { view.showData(THREE_LIST_ITEMS) }
-        then<Any>(view).should(atLeastOnce()).run { view.showNoDataMessage() }
-        then<Any>(view).should(atLeastOnce()).run { presenter.handleError("test") }
+        Thread.sleep(100)
+        verify(view, atLeastOnce()).stopLoadingIndicator()
+        verify(view, atLeastOnce()).showNoDataMessage()
     }
 
     @Test
     fun launchDetailsScreen() {
         // Given
-
+        whenever(repo.loadList()).thenReturn(Flowable.just(THREE_LIST_ITEMS))
         // When
-
+        presenter.launchDetailsScreen(LISTITEM1)
 
         // Then
-
+        Thread.sleep(100)
+        verify(view, atLeastOnce()).goToDetails(any())
     }
 
     @Test
@@ -139,16 +116,21 @@ class ListPresenterTest {
         // When
         presenter.removeListItem(LISTITEM1)
         // Then
-        then<Any>(view).should(atLeastOnce()).run { view.stopLoadingIndicator() }
-        verify(view).showData(THREE_LIST_ITEMS)
-    }
-
-    @Test
-    fun launchEmptyDetailsScreen() {
+        Thread.sleep(100)
+        verify(view).showData(any())
     }
 
     @Test
     fun processEvent() {
+        // Given
+        whenever(repo.getListItem(1)).thenReturn(Flowable.just(LISTITEM1))
+
+        // When
+        presenter.processEvent(1)
+
+        // Then
+        Thread.sleep(100)
+        verify(view).goToDetails(LISTITEM1)
     }
 
 }
