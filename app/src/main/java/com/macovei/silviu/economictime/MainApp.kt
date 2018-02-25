@@ -19,7 +19,6 @@ class MainApp : MultiDexApplication(), HasActivityInjector {
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
 
 
-
     override fun onCreate() {
         super.onCreate()
         AppInjector.init(this)
@@ -27,7 +26,7 @@ class MainApp : MultiDexApplication(), HasActivityInjector {
     }
 
     override fun activityInjector(): AndroidInjector<Activity> {
-       return dispatchingAndroidInjector
+        return dispatchingAndroidInjector
     }
 
 }
