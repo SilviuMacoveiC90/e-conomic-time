@@ -1,5 +1,6 @@
 package com.macovei.silviu.economictime.ui.list.adapter
 
+import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.Adapter
 import android.view.LayoutInflater
@@ -10,7 +11,7 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.macovei.silviu.economictime.R
-import com.macovei.silviu.economictime.data.entity.ListItem
+import com.macovei.silviu.economictime.data.entity.AdministrationItem
 
 
 /**
@@ -19,7 +20,7 @@ import com.macovei.silviu.economictime.data.entity.ListItem
 class ListAdapter : Adapter<ListAdapter.ViewHolder>() {
 
 
-    private var items: Collection<ListItem>? = null
+    private var items: Collection<AdministrationItem>? = null
 
     private var listener: ItemClickListener? = null
 
@@ -28,10 +29,10 @@ class ListAdapter : Adapter<ListAdapter.ViewHolder>() {
         val item = items!!.elementAt(position)
         holder?.project?.text = item.project
         holder?.activtity?.text = item.activity
-        holder?.hours?.text = item.hours
+        holder?.hours?.text = item.hours.toString()
         holder?.status?.text = item.status
 
-        holder?.edit?.setOnClickListener({
+        holder?.body?.setOnClickListener({
             listener?.goToDetails(item.uid!!)
         })
 
@@ -53,7 +54,7 @@ class ListAdapter : Adapter<ListAdapter.ViewHolder>() {
         return R.layout.list_item
     }
 
-    fun replace(items: Collection<ListItem>) {
+    fun replace(items: Collection<AdministrationItem>) {
         this.items = items
         notifyDataSetChanged()
     }
@@ -72,8 +73,8 @@ class ListAdapter : Adapter<ListAdapter.ViewHolder>() {
         @BindView(R.id.item_stauts)
         lateinit var status: TextView
 
-        @BindView(R.id.item_edit)
-        lateinit var edit: ImageView
+        @BindView(R.id.body_view)
+        lateinit var body: ConstraintLayout
 
         @BindView(R.id.item_remove)
         lateinit var remove: ImageView
@@ -92,6 +93,6 @@ class ListAdapter : Adapter<ListAdapter.ViewHolder>() {
 
     interface ItemClickListener {
         fun goToDetails(uid: Long)
-        fun deleteElement(item: ListItem)
+        fun deleteElement(item: AdministrationItem)
     }
 }
