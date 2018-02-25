@@ -7,6 +7,7 @@
 
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/body_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -14,6 +15,8 @@
             android:id="@+id/item_project"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:text="@string/dummy"
             android:textSize="26dp"
             app:layout_constraintBottom_toTopOf="@+id/item_activity"
@@ -25,6 +28,8 @@
             android:id="@+id/item_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:text="@string/dummy"
             android:textSize="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -37,7 +42,7 @@
             android:text="@string/dummy"
             android:textSize="26dp"
             app:layout_constraintBottom_toTopOf="@+id/item_stauts"
-            app:layout_constraintEnd_toStartOf="@id/item_edit"
+            app:layout_constraintEnd_toStartOf="@id/item_remove"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
 
@@ -48,24 +53,17 @@
             android:text="@string/dummy"
             android:textSize="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/item_edit"
+            app:layout_constraintEnd_toStartOf="@id/item_remove"
             app:layout_constraintTop_toBottomOf="@+id/item_hours" />
 
-        <ImageView
-            android:id="@+id/item_edit"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@android:drawable/ic_menu_edit"
-            app:layout_constraintRight_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/item_remove"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@android:drawable/ic_delete"
-            app:layout_constraintRight_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:src="@android:drawable/ic_menu_delete"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>
