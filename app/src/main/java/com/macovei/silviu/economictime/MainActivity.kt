@@ -3,7 +3,6 @@ package com.macovei.silviu.economictime
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.view.Menu
 import com.macovei.silviu.economictime.di.Injectable
 import com.macovei.silviu.economictime.ui.Navigator
 import dagger.android.AndroidInjector
@@ -30,15 +29,6 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector, Injectable
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
         return dispatchingAndroidInjector
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.menu, menu)
-
-        // return true so that the menu pop up is opened
-        return true
     }
 
 }
