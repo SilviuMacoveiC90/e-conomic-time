@@ -1,9 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/list"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-    tools:listitem="@layout/list_item" />
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        tools:listitem="@layout/list_item" />
+
+
+    <LinearLayout
+        android:id="@+id/loading_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="horizontal"
+        android:visibility="invisible">
+
+        <ProgressBar
+            style="?android:progressBarStyleLarge"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical|center_horizontal" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/no_elements"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="horizontal"
+        android:visibility="invisible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:text="@string/there_are_no_items_added_to_list"
+            android:textSize="26dp" />
+
+    </LinearLayout>
+</FrameLayout>

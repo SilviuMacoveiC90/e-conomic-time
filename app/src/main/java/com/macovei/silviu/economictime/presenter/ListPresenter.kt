@@ -1,6 +1,6 @@
 package com.macovei.silviu.economictime.presenter
 
-import com.macovei.silviu.economictime.data.entity.ListItem
+import com.macovei.silviu.economictime.data.entity.AdministrationItem
 import com.macovei.silviu.economictime.data.repository.ListRepository
 import com.macovei.silviu.economictime.ui.list.ListView
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,15 +17,15 @@ import javax.inject.Inject
 class ListPresenter @Inject constructor(
         private val repository: ListRepository) {
 
-    var listView: ListView?
-    set(value) {
-        value?.let {
-            view = WeakReference(it)
-        }
-    }
-    get() {
-        return view.get()
-    }
+    var listView: ListView? = null
+//        set(value) {
+//            value?.let {
+//                view = WeakReference(it)
+//            }
+//        }
+//        get() {
+//            return view.get()
+//        }
 
     private var view: WeakReference<ListView?> = WeakReference(null)
 
@@ -43,7 +43,8 @@ class ListPresenter @Inject constructor(
     }
 
 
-     fun loadData() {
+    fun loadData() {
+        listView?.startLoadingIndicator()
         val disposable = repository.loadList()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -65,8 +66,8 @@ class ListPresenter @Inject constructor(
     }
 
 
-    fun removeListItem(listItem: ListItem) {
-        listItem.uid?.let {
+    fun removeListItem(administrationItem: AdministrationItem) {
+        administrationItem.uid?.let {
             val disposable = repository.deleteListItem(it)
                     .observeOn(AndroidSchedulers.mainThread())
                     .onErrorComplete()
@@ -76,8 +77,18 @@ class ListPresenter @Inject constructor(
         } ?: loadData()
     }
 
-    fun launchDetailsScreen(listItem: ListItem) {
-        listView?.goToDetails(listItem)
+
+    fun removeList() {
+        val disposable = repository.clearData()
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorComplete()
+                .doOnComplete { loadData() }
+                .subscribe()
+        disposeBag.add(disposable)
+    }
+
+    fun launchDetailsScreen(administrationItem: AdministrationItem) {
+        listView?.goToDetails(administrationItem)
     }
 
     fun launchEmptyDetailsScreen() {
@@ -92,7 +103,7 @@ class ListPresenter @Inject constructor(
     /**
      * Updates view after loading data is completed successfully.
      */
-     fun handleReturnedData(list: List<ListItem>?) {
+    fun handleReturnedData(list: List<AdministrationItem>?) {
         listView?.stopLoadingIndicator()
         if (list != null && !list.isEmpty()) {
             listView?.showData(list)
@@ -104,7 +115,7 @@ class ListPresenter @Inject constructor(
     /**
      * Updates view if there is an error after loading data from repository.
      */
-     fun handleError(errorMessage: String) {
+    fun handleError(errorMessage: String) {
         listView?.stopLoadingIndicator()
         listView?.showErrorMessage(errorMessage)
     }

@@ -3,14 +3,13 @@ package com.macovei.silviu.economictime.ui.list
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.LinearLayout
+import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.macovei.silviu.economictime.R
-import com.macovei.silviu.economictime.data.entity.ListItem
+import com.macovei.silviu.economictime.data.entity.AdministrationItem
 import com.macovei.silviu.economictime.di.Injectable
 import com.macovei.silviu.economictime.presenter.ListPresenter
 import com.macovei.silviu.economictime.ui.Navigator
@@ -31,10 +30,16 @@ class ListFragment : Fragment(), ListView, Injectable {
     @Inject
     lateinit var listPresenter: ListPresenter
 
-    @BindView(R.id.list)
-    lateinit var list: RecyclerView
-
     lateinit var adapter: ListAdapter
+
+    @BindView(R.id.list)
+    lateinit var recyclerView: RecyclerView
+
+    @BindView(R.id.loading_indicator)
+    lateinit var loadingView: LinearLayout
+
+    @BindView(R.id.no_elements)
+    lateinit var noElements: LinearLayout
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
@@ -46,7 +51,7 @@ class ListFragment : Fragment(), ListView, Injectable {
         ButterKnife.bind(this, view!!)
         adapter = ListAdapter()
         updateFromAdapter()
-        list.adapter = adapter
+        recyclerView.adapter = adapter
         listPresenter.attachView(this)
     }
 
@@ -55,16 +60,25 @@ class ListFragment : Fragment(), ListView, Injectable {
         listPresenter.detachView()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.menu, menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == R.id.add) {
-            listPresenter.launchEmptyDetailsScreen()
+
+        }
+        when (item?.itemId) {
+            R.id.add -> listPresenter.launchEmptyDetailsScreen()
+            R.id.delete_all -> listPresenter.removeList()
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun updateFromAdapter() {
         adapter.setItemClickListener(object : ListAdapter.ItemClickListener {
-            override fun deleteElement(item: ListItem) {
+            override fun deleteElement(item: AdministrationItem) {
                 listPresenter.removeListItem(item)
             }
 
@@ -74,18 +88,38 @@ class ListFragment : Fragment(), ListView, Injectable {
         })
     }
 
-
-    override fun showData(list: List<ListItem>) {
+    override fun showData(list: List<AdministrationItem>) {
+        recyclerView.removeAllViewsInLayout()
         adapter.replace(list)
     }
 
+    override fun showNoDataMessage() {
+        recyclerView.removeAllViewsInLayout()
+        loadingView.visibility = View.GONE
+        recyclerView.visibility = View.GONE
+        noElements.visibility = View.VISIBLE
+        Toast.makeText(context, "The list is empty", Toast.LENGTH_LONG)
+    }
 
-    override fun goToDetails(listItem: ListItem) {
-        nav.goToEdit(listItem)
+
+    override fun goToDetails(administrationItem: AdministrationItem) {
+        nav.goToEdit(administrationItem)
     }
 
     override fun goToEmptyDetails() {
         nav.goToEmptyEdit()
+    }
+
+    override fun startLoadingIndicator() {
+        loadingView.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
+        noElements.visibility = View.GONE
+    }
+
+    override fun stopLoadingIndicator() {
+        loadingView.visibility = View.GONE
+        recyclerView.visibility = View.VISIBLE
+        noElements.visibility = View.GONE
     }
 }
 
