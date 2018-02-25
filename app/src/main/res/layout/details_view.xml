@@ -22,6 +22,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/insert_text"
+        android:focusable="false"
+        android:nextFocusDown="@id/item_project_value"
         app:layout_constraintBottom_toBottomOf="@+id/item_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.7"
@@ -47,6 +49,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/insert_text"
+        android:nextFocusDown="@id/item_activity_value"
         app:layout_constraintBottom_toBottomOf="@+id/item_project"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.7"
@@ -72,6 +75,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/insert_text"
+        android:nextFocusDown="@id/item_hours_value"
         app:layout_constraintBottom_toBottomOf="@+id/item_activity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.7"
@@ -97,11 +101,36 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/insert_text"
+        android:inputType="number"
         app:layout_constraintBottom_toBottomOf="@+id/item_hours"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.7"
         app:layout_constraintStart_toEndOf="@+id/item_hours"
         app:layout_constraintTop_toTopOf="@+id/item_hours" />
+
+    <TextView
+        android:id="@+id/item_status"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/status"
+        app:layout_constraintEnd_toStartOf="@+id/item_status_value"
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_hours" />
+
+    <EditText
+        android:id="@+id/item_status_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/insert_text"
+        app:layout_constraintBottom_toBottomOf="@+id/item_status"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toEndOf="@+id/item_status"
+        app:layout_constraintTop_toTopOf="@+id/item_status" />
 
     <Button
         android:id="@+id/item_save"
