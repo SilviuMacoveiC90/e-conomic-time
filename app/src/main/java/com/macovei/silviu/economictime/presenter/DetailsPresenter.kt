@@ -39,6 +39,7 @@ class DetailsPresenter @Inject constructor(
     fun saveData() {
         detailsView?.run {
             AdministrationItem().apply {
+                uid = null
                 date = getDateValue()
                 project = getProjectValue()
                 activity = getActivityValue()
