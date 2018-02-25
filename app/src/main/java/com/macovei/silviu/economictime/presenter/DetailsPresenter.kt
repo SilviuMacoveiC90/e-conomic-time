@@ -1,6 +1,6 @@
 package com.macovei.silviu.economictime.presenter
 
-import com.macovei.silviu.economictime.data.entity.ListItem
+import com.macovei.silviu.economictime.data.entity.AdministrationItem
 import com.macovei.silviu.economictime.data.repository.ListRepository
 import com.macovei.silviu.economictime.ui.details.DetailsView
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -8,19 +8,21 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
+
 /**
  * Created by silviumacovei on 2/21/18.
  */
 class DetailsPresenter @Inject constructor(
         private val repository: ListRepository) {
 
-    private var detailsView: DetailsView? = null
+    var detailsView: DetailsView? = null
+
+    var item: AdministrationItem = AdministrationItem()
 
     private val disposeBag: CompositeDisposable = CompositeDisposable()
 
     fun attachView(view: DetailsView) {
         detailsView = view
-
     }
 
     fun detachView() {
@@ -28,13 +30,26 @@ class DetailsPresenter @Inject constructor(
         disposeBag.dispose()
     }
 
-
-    fun prepareItem(uid: Long) {
-        getItem(uid)
+    fun prepareItem(id: Long) {
+        if (id >= 0) {
+            getItem(id)
+        }
     }
 
-    fun saveData(listItem: ListItem) {
-        insertItem(listItem)
+    fun saveData() {
+        detailsView?.run {
+            AdministrationItem().apply {
+                date = getDateValue()
+                project = getProjectValue()
+                activity = getActivityValue()
+                hours = getHoursValue()
+                status = getStatusValue()
+            }.takeIf {
+                isItemValid(it)
+            }?.let {
+                insertItem(it)
+            }
+        }
     }
 
     private fun getItem(uid: Long) {
@@ -42,17 +57,48 @@ class DetailsPresenter @Inject constructor(
                 .filter({ true })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ listItem -> detailsView?.updateUiWithData(listItem) })
+                .subscribe({ listItem ->
+                    item = listItem
+                    detailsView?.updateUiWithData(listItem)
+                    detailsView?.changeToUpdate()
+                })
         disposeBag.add(disposable)
     }
 
 
-    private fun insertItem(listItem: ListItem) {
-        val disposable = repository.addListItem(listItem)
-                .subscribeOn(Schedulers.io())
+    fun insertItem(administrationItem: AdministrationItem) {
+        val disposable = repository.addListItem(administrationItem)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({detailsView?.eventFinished()})
+                .doOnComplete { detailsView?.eventFinished() }
+                .subscribe()
         disposeBag.add(disposable)
+    }
+
+    fun updateItem() {
+        detailsView?.run {
+            item.apply {
+                date = getDateValue()
+                project = getProjectValue()
+                activity = getActivityValue()
+                hours = getHoursValue()
+                status = getStatusValue()
+            }
+            val disposable = repository.updateItem(item)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnComplete { detailsView?.eventFinished() }
+                    .subscribe()
+            disposeBag.add(disposable)
+        }
+    }
+
+    fun isItemValid(item: AdministrationItem): Boolean {
+        return item.run {
+            activity.isNotBlank() &&
+                    date.isNotBlank() &&
+                    project.isNotBlank() &&
+                    status.isNotBlank() &&
+                    hours > 0
+        }
     }
 
 }
