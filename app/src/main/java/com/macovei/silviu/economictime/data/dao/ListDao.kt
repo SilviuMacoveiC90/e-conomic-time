@@ -1,10 +1,7 @@
 package com.macovei.silviu.economictime.data.dao
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
-import com.macovei.silviu.economictime.data.entity.ListItem
+import android.arch.persistence.room.*
+import com.macovei.silviu.economictime.data.entity.AdministrationItem
 import io.reactivex.Flowable
 
 
@@ -13,22 +10,25 @@ import io.reactivex.Flowable
  */
 @Dao
 interface ListDao {
-    @Query("SELECT * FROM items")
-    fun all(): Flowable<List<ListItem>>
+    @Query("SELECT * FROM AdministrationItems")
+    fun all(): Flowable<List<AdministrationItem>>
 
-    @Query("SELECT COUNT(*) from items")
+    @Query("SELECT COUNT(*) from AdministrationItems")
     fun count(): Int
 
-    @Query("SELECT * FROM " + "items" + " WHERE uid == :uid")
-    fun getListItemById(uid: Long): Flowable<ListItem>
+    @Query("SELECT * FROM " + "AdministrationItems" + " WHERE uid == :uid")
+    fun getListItemById(uid: Long): Flowable<AdministrationItem>
 
-    @Query("DELETE FROM " + "items")
+    @Query("DELETE FROM " + "AdministrationItems")
     fun deleteAll()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(listItem: ListItem)
+    fun insert(administrationItem: AdministrationItem)
 
-    @Query("DELETE FROM " + "items" + " WHERE uid = :uid")
+    @Query("DELETE FROM " + "AdministrationItems" + " WHERE uid = :uid")
     fun delete(uid: Long)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    fun updateItem(item: AdministrationItem)
 
 }

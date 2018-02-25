@@ -1,6 +1,6 @@
 package com.macovei.silviu.economictime.data.repository
 
-import com.macovei.silviu.economictime.data.entity.ListItem
+import com.macovei.silviu.economictime.data.entity.AdministrationItem
 import com.macovei.silviu.economictime.di.AppScope
 import io.reactivex.Completable
 import io.reactivex.Flowable
@@ -14,32 +14,16 @@ open class ListRepository @Inject constructor(
         @Local private val localDataSource: ListDataSource
 ) : IListRepo {
 
-
-
-//    @VisibleForTesting internal var caches: MutableList<ListItem> = ArrayList()
-
-
-    override fun loadList(): Flowable<List<ListItem>> {
-//        if (caches.size > 0) {
-//            // if cache is available, return it immediately
-//            return Flowable.just<List<ListItem>>(caches)
-//        } else {
-        // else return data from local storage
+    override fun loadList(): Flowable<List<AdministrationItem>> {
         return localDataSource.loadList()
-//                    .flatMap({ Flowable.fromIterable(it) })
-//                    .doOnNext { listItem -> caches.add(listItem) }
-//                    .toList()
-//                    .toFlowable()
-//                    .filter({ list -> !list.isEmpty() })
-//        }
     }
 
-    override fun getListItem(uid: Long): Flowable<ListItem> {
+    override fun getListItem(uid: Long): Flowable<AdministrationItem> {
         return localDataSource.getItem(uid)
     }
 
-    override fun addListItem(listItem: ListItem): Completable {
-        return localDataSource.addListItem(listItem)
+    override fun addListItem(administrationItem: AdministrationItem): Completable {
+        return localDataSource.addListItem(administrationItem)
     }
 
     override fun clearData(): Completable {
@@ -51,8 +35,12 @@ open class ListRepository @Inject constructor(
         return localDataSource.deleteListItem(uid)
     }
 
-    override fun getItem(uid: Long): Flowable<ListItem> {
-          return localDataSource.getItem(uid)
+    override fun getItem(uid: Long): Flowable<AdministrationItem> {
+        return localDataSource.getItem(uid)
+    }
+
+    override fun updateItem(item: AdministrationItem): Completable {
+        return localDataSource.updateItem(item)
     }
 
 }
